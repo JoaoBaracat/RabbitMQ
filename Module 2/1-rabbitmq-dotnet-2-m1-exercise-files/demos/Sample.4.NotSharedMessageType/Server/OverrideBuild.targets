@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <SvcUtilPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.0A\bin\NETFX 4.0 Tools</SvcUtilPath>
+  </PropertyGroup>
+
+  <!-- ES - there are multiple dependencies in the XSDs here. Both the service and entity XSDs have xs:imports for 
+            entities in Common - book, product etc. Additionally the service contracts xs:import the member entity.
+            We generate all XSDs into one CS file to avoid duplication of class generation in the members namespace,
+            and we reference the common XSDs and DLL so we don't generate classes already in common-->
+
+  <Target Name="BeforeBuild">   
+    <Exec Command='"$(SvcUtilPath)\svcutil" /dconly ..\Contracts\MyMessage.xsd /language:C# /serializable /n:http://tempuri.org,Server.Contracts' />
+  </Target>
+
+</Project>

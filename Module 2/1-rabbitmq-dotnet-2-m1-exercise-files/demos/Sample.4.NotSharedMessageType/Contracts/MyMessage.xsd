@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MyMessage"
+    targetNamespace="http://tempuri.org"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org"
+    xmlns:mstns="http://tempuri.org"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:element name="MyMessage" type="MyMessage"/>
+  <xs:element name="MyMessage2" type="MyMessage2"/>
+
+  <xs:complexType name="MyMessage">
+    <xs:sequence>
+      <xs:element name="Message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MyMessage2">
+    <xs:sequence>
+      <xs:element name="Message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
