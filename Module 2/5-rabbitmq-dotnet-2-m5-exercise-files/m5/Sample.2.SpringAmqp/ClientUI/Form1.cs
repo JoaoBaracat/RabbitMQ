@@ -23,6 +23,12 @@ namespace ClientUI
         private void getWeatherButton_Click(object sender, EventArgs e)
         {
             var ctx = ContextRegistry.GetContext();
+
+
+            //var novo = new RabbitMQ.Client.ConnectionFactory();
+            //novo.HostName = "";
+            
+
             var weatherServiceClient = (IWeatherServiceGateway)ctx.GetObject("WeatherServiceGateway");
             var response = weatherServiceClient.Send(new Contract.WeatherRequest { Location = "London" });
 

@@ -38,6 +38,8 @@ namespace Server
             var consumer = new QueueingBasicConsumer(model);
             model.BasicConsume(QueueName, false, consumer);
 
+            
+
             Console.WriteLine("Started and listening for a message");
             while (true)
             {
@@ -49,7 +51,9 @@ namespace Server
                 var pathProperty = (byte[])deliveryArgs.BasicProperties.Headers["OutputFileName"];
                 var outputPath = Encoding.Default.GetString(pathProperty);
                 var sequenceNumber = (int)deliveryArgs.BasicProperties.Headers["SequenceNumber"];
-                
+                var endSeq = (bool)deliveryArgs.BasicProperties.Headers["EndSeq"];
+
+                outputPath = outputPath + ".inprogress";
 
                 //Adding message                
                 using (var fileStream = new FileStream(outputPath, FileMode.Append, FileAccess.Write))
@@ -57,7 +61,14 @@ namespace Server
                     fileStream.Write(deliveryArgs.Body, 0, deliveryArgs.Body.Length);
                     fileStream.Flush();
                 }
-                Console.WriteLine("Message saved to disk - Sequence No = {0}", sequenceNumber);                
+                Console.WriteLine("Message saved to disk - Sequence No = {0}", sequenceNumber);     
+                
+                if (endSeq)
+                {
+                    Console.WriteLine("Received last message");
+                    var newOutputPath = Path.ChangeExtension(outputPath, ".completed");
+                    File.Move(outputPath, newOutputPath);
+                }
 
                 model.BasicAck(deliveryArgs.DeliveryTag, false);
                 Console.WriteLine("Listening for another message");

@@ -51,6 +51,7 @@ namespace Client
                     int remaining = (int)fileStream.Length;
                     int length = (int)fileStream.Length;
                     var messageCount = 0;
+                    bool endOfSeq = false;
 
                     while (true)
                     {
@@ -69,6 +70,7 @@ namespace Client
                         {
                             buffer = new byte[remaining];
                             read = fileStream.Read(buffer, 0, remaining);
+                            endOfSeq = true;
                         }
 
 
@@ -78,6 +80,7 @@ namespace Client
                         properties.Headers = new ListDictionary();
                         properties.Headers.Add("OutputFileName", outputFileName);
                         properties.Headers.Add("SequenceNumber", messageCount);                        
+                        properties.Headers.Add("EndSeq", endOfSeq);                        
 
                         //Send message
                         Console.WriteLine("Sending chunk message - Index = {0}; Length = {0}", messageCount, read);
